@@ -6,6 +6,7 @@ export default function StartSessionScreen() {
     const router = useRouter();
     const params = useLocalSearchParams();
 
+    // Conversion des paramètres pour éviter qu'ils soient interprétés comme des strings
     const [currentExercise] = useState(params.currentExercise || "Squat");
     const [totalRepetitions] = useState(Number(params.totalRepetitions) || 15);
     const [totalSeries] = useState(Number(params.totalSeries) || 2);
@@ -19,15 +20,15 @@ export default function StartSessionScreen() {
     const [isRunning, setIsRunning] = useState(false);
 
     useEffect(() => {
-        let timer: NodeJS.Timeout | null = null;
+        let interval: NodeJS.Timeout | null = null;
 
         if (isRunning) {
-            timer = setInterval(() => {
+            interval = setInterval(() => {
                 setTimeLeft((prev) => {
                     if (prev > 0) {
                         return prev - 1;
                     } else {
-                        clearInterval(timer!);
+                        clearInterval(interval!);
                         handleNextStep();
                         return 0;
                     }
@@ -35,7 +36,7 @@ export default function StartSessionScreen() {
             }, 1000);
         }
 
-        return () => clearInterval(timer!);
+        return () => clearInterval(interval!);
     }, [isRunning, timeLeft]);
 
     const handleNextStep = () => {
@@ -81,7 +82,7 @@ export default function StartSessionScreen() {
                     {String(Math.floor(timeLeft / 60)).padStart(2, "0")}:
                     {String(timeLeft % 60).padStart(2, "0")}
                 </Text>
-                {isPaused && <Text style={styles.pauseText}>PAUSE</Text>}
+                {isPaused && <Text style={styles.pauseText}>PAUSE</Text>} {/* Affichage du texte PAUSE */}
             </View>
 
             <Text style={styles.seriesText}>
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     timerText: { fontSize: 36, fontWeight: "bold", color: "black" },
-    pauseText: { fontSize: 18, color: "red", marginTop: 5, fontWeight: "bold" },
+    pauseText: { fontSize: 18, color: "red", marginTop: 5, fontWeight: "bold" }, // Affichage en rouge quand en pause
 
     seriesText: { fontSize: 18, color: "#333", marginBottom: 20 },
 
