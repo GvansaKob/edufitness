@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 export default function StartSessionScreen() {
     const router = useRouter();
+    const params = useLocalSearchParams();
 
-    const [currentExercise, setCurrentExercise] = useState("Squat");
-    const [totalRepetitions, setTotalRepetitions] = useState(15);
+    const [currentExercise] = useState(params.currentExercise || "Squat");
+    const [totalRepetitions] = useState(Number(params.totalRepetitions) || 15);
+    const [totalSeries] = useState(Number(params.totalSeries) || 2);
+    const [movementTime] = useState(Number(params.movementTime) || 10);
+    const [pauseTime] = useState(Number(params.pauseTime) || 5);
+
     const [currentRepetition, setCurrentRepetition] = useState(1);
-    const [totalSeries, setTotalSeries] = useState(2);
     const [currentSeries, setCurrentSeries] = useState(1);
-
-    const [movementTime, setMovementTime] = useState(10);
-    const [pauseTime, setPauseTime] = useState(5); 
-
     const [timeLeft, setTimeLeft] = useState(movementTime);
     const [isPaused, setIsPaused] = useState(false);
     const [isRunning, setIsRunning] = useState(false);
@@ -52,14 +52,17 @@ export default function StartSessionScreen() {
                 setIsPaused(false);
                 setIsRunning(true);
             } else {
-                alert("Session terminée !");
                 router.push("/session-recap");
-              }
+            }
         } else {
             setTimeLeft(pauseTime);
             setIsPaused(true);
             setIsRunning(true);
         }
+    };
+
+    const togglePauseResume = () => {
+        setIsRunning((prev) => !prev);
     };
 
     return (
@@ -85,12 +88,9 @@ export default function StartSessionScreen() {
                 Séries : {currentSeries}/{totalSeries}
             </Text>
 
-            <TouchableOpacity
-                style={styles.startButton}
-                onPress={() => setIsRunning(true)}
-            >
+            <TouchableOpacity style={styles.startButton} onPress={togglePauseResume}>
                 <Text style={styles.startButtonText}>
-                    {isRunning ? "En cours..." : "Commencer"}
+                    {isRunning ? "Pause" : isPaused ? "Reprendre" : "Commencer"}
                 </Text>
             </TouchableOpacity>
         </View>
@@ -128,4 +128,3 @@ const styles = StyleSheet.create({
     },
     startButtonText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
 });
-

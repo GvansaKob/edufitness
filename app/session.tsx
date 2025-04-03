@@ -44,8 +44,16 @@ export default function SessionScreen() {
             }
         }
 
-        Alert.alert("Succès", "Exercices validés, début de la session !");
-        router.push("/start-session");
+        router.push({
+            pathname: "/start-session",
+            params: {
+                currentExercise: selectedExercises[0], 
+                totalRepetitions: exerciseDetails[selectedExercises[0]]?.movements,
+                totalSeries: exerciseDetails[selectedExercises[0]]?.series,
+                movementTime: exerciseDetails[selectedExercises[0]]?.timePerMovement,
+                pauseTime: exerciseDetails[selectedExercises[0]]?.restTime,
+            }
+        });
     };
 
     return (
