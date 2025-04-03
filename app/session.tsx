@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-    View, Text, TouchableOpacity, FlatList, StyleSheet, Alert, TextInput, KeyboardAvoidingView, Platform
+    View, Text, TouchableOpacity, FlatList, StyleSheet, Alert, TextInput, KeyboardAvoidingView, Platform, ScrollView
 } from "react-native";
 import { useRouter } from "expo-router";
 
@@ -53,104 +53,107 @@ export default function SessionScreen() {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.container}
         >
-            <Text style={styles.mainTitle}>EDUFITNESS</Text>
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <Text style={styles.mainTitle}>EDUFITNESS</Text>
 
-            <Text style={styles.sectionTitle}>Sélectionnez vos exercices :</Text>
-            <FlatList
-                data={exercisesList}
-                keyExtractor={(item) => item}
-                numColumns={3}
-                contentContainerStyle={styles.exerciseContainer}
-                columnWrapperStyle={{ justifyContent: "space-between" }}
-                renderItem={({ item }) => (
-                    <TouchableOpacity
-                        style={[
-                            styles.exerciseButton,
-                            selectedExercises.includes(item) && styles.selectedExercise
-                        ]}
-                        onPress={() => toggleExercise(item)}
-                    >
-                        <Text
-                            style={[
-                                styles.exerciseText,
-                                selectedExercises.includes(item) && styles.selectedText
-                            ]}
-                        >
-                            {item}
-                        </Text>
-                    </TouchableOpacity>
-                )}
-            />
-
-            {selectedExercises.length > 0 && (
+                <Text style={styles.sectionTitle}>Sélectionnez vos exercices :</Text>
                 <FlatList
-                    data={selectedExercises}
+                    data={exercisesList}
                     keyExtractor={(item) => item}
-                    contentContainerStyle={styles.detailsContainer}
-                    nestedScrollEnabled={true}
-                    renderItem={({ item: exercise }) => (
-                        <View key={exercise} style={styles.exerciseBlock}>
-                            <Text style={styles.exerciseLabel}>{exercise}</Text>
-
-                            <View style={styles.inputRow}>
-                                <View style={styles.inputGroup}>
-                                    <Text style={styles.inputLabel}>Séries :</Text>
-                                    <TextInput
-                                        style={styles.input}
-                                        keyboardType="numeric"
-                                        value={exerciseDetails[exercise]?.series || ""}
-                                        onChangeText={(text) => handleInputChange(exercise, "series", text)}
-                                    />
-                                </View>
-
-                                <View style={styles.inputGroup}>
-                                    <Text style={styles.inputLabel}>Mouvements :</Text>
-                                    <TextInput
-                                        style={styles.input}
-                                        keyboardType="numeric"
-                                        value={exerciseDetails[exercise]?.movements || ""}
-                                        onChangeText={(text) => handleInputChange(exercise, "movements", text)}
-                                    />
-                                </View>
-                            </View>
-
-                            <View style={styles.inputRow}>
-                                <View style={styles.inputGroup}>
-                                    <Text style={styles.inputLabel}>Temps/mouvement (s) :</Text>
-                                    <TextInput
-                                        style={styles.input}
-                                        keyboardType="numeric"
-                                        value={exerciseDetails[exercise]?.timePerMovement || ""}
-                                        onChangeText={(text) => handleInputChange(exercise, "timePerMovement", text)}
-                                    />
-                                </View>
-
-                                <View style={styles.inputGroup}>
-                                    <Text style={styles.inputLabel}>Temps de pause (s) :</Text>
-                                    <TextInput
-                                        style={styles.input}
-                                        keyboardType="numeric"
-                                        value={exerciseDetails[exercise]?.restTime || ""}
-                                        onChangeText={(text) => handleInputChange(exercise, "restTime", text)}
-                                    />
-                                </View>
-                            </View>
-                        </View>
+                    numColumns={3}
+                    contentContainerStyle={styles.exerciseContainer}
+                    columnWrapperStyle={{ justifyContent: "space-between" }}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity
+                            style={[
+                                styles.exerciseButton,
+                                selectedExercises.includes(item) && styles.selectedExercise
+                            ]}
+                            onPress={() => toggleExercise(item)}
+                        >
+                            <Text
+                                style={[
+                                    styles.exerciseText,
+                                    selectedExercises.includes(item) && styles.selectedText
+                                ]}
+                            >
+                                {item}
+                            </Text>
+                        </TouchableOpacity>
                     )}
                 />
-            )}
 
-            {selectedExercises.length > 0 && (
-                <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-                    <Text style={styles.nextButtonText}>Suivant</Text>
-                </TouchableOpacity>
-            )}
+                {selectedExercises.length > 0 && (
+                    <FlatList
+                        data={selectedExercises}
+                        keyExtractor={(item) => item}
+                        contentContainerStyle={styles.detailsContainer}
+                        nestedScrollEnabled={true}
+                        renderItem={({ item: exercise }) => (
+                            <View key={exercise} style={styles.exerciseBlock}>
+                                <Text style={styles.exerciseLabel}>{exercise}</Text>
+
+                                <View style={styles.inputRow}>
+                                    <View style={styles.inputGroup}>
+                                        <Text style={styles.inputLabel}>Séries :</Text>
+                                        <TextInput
+                                            style={styles.input}
+                                            keyboardType="numeric"
+                                            value={exerciseDetails[exercise]?.series || ""}
+                                            onChangeText={(text) => handleInputChange(exercise, "series", text)}
+                                        />
+                                    </View>
+
+                                    <View style={styles.inputGroup}>
+                                        <Text style={styles.inputLabel}>Répétitions :</Text>
+                                        <TextInput
+                                            style={styles.input}
+                                            keyboardType="numeric"
+                                            value={exerciseDetails[exercise]?.movements || ""}
+                                            onChangeText={(text) => handleInputChange(exercise, "movements", text)}
+                                        />
+                                    </View>
+                                </View>
+
+                                <View style={styles.inputRow}>
+                                    <View style={styles.inputGroup}>
+                                        <Text style={styles.inputLabel}>Temps/répétition(s) :</Text>
+                                        <TextInput
+                                            style={styles.input}
+                                            keyboardType="numeric"
+                                            value={exerciseDetails[exercise]?.timePerMovement || ""}
+                                            onChangeText={(text) => handleInputChange(exercise, "timePerMovement", text)}
+                                        />
+                                    </View>
+
+                                    <View style={styles.inputGroup}>
+                                        <Text style={styles.inputLabel}>Temps de pause(s) :</Text>
+                                        <TextInput
+                                            style={styles.input}
+                                            keyboardType="numeric"
+                                            value={exerciseDetails[exercise]?.restTime || ""}
+                                            onChangeText={(text) => handleInputChange(exercise, "restTime", text)}
+                                        />
+                                    </View>
+                                </View>
+                            </View>
+                        )}
+                    />
+                )}
+
+                {selectedExercises.length > 0 && (
+                    <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+                        <Text style={styles.nextButtonText}>Suivant</Text>
+                    </TouchableOpacity>
+                )}
+            </ScrollView>
         </KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: "#fff", padding: 20 },
+    scrollContainer: { paddingBottom: 40 }, 
 
     mainTitle: { fontSize: 28, fontWeight: "bold", color: "orange", textAlign: "center", marginBottom: 20 },
     sectionTitle: { fontSize: 20, fontWeight: "bold", color: "#4B0082", marginBottom: 10 },
@@ -191,8 +194,13 @@ const styles = StyleSheet.create({
     },
 
     nextButton: {
-        marginTop: 20, backgroundColor: "darkviolet", padding: 15,
-        borderRadius: 10, alignItems: "center", width: "100%"
+        marginTop: 20,
+        backgroundColor: "darkviolet",
+        padding: 15,
+        borderRadius: 10,
+        alignItems: "center",
+        width: "100%",
+        marginBottom: 20 
     },
     nextButtonText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
 });

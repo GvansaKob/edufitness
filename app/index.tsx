@@ -6,7 +6,7 @@ export default function HomeScreen() {
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" }}>
-      <Text style={{ fontSize: 24, fontWeight: "bold", color: "orange" }}>EDUFITNESS</Text>
+      <Text style={{ fontSize: 50, fontWeight: "bold", color: "orange" }}>EDUFITNESS</Text>
       <TouchableOpacity
         onPress={() => router.push("/session")}
         style={{
@@ -16,7 +16,7 @@ export default function HomeScreen() {
           borderRadius: 10,
         }}
       >
-        <Text style={{ color: "white", fontSize: 18 }}>Commencez ma session</Text>
+        <Text style={{ color: "white", fontSize: 18 }}>Commencer ma session</Text>
       </TouchableOpacity>
     </View>
   );
